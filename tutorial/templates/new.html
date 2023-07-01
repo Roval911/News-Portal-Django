@@ -1,0 +1,15 @@
+
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+<!-- Название у нас будет proudcts -->
+{% block title %}
+New
+{% endblock title %}
+
+
+{% block content %}
+{{ new.name_post |censor }}
+{{ new.time_create |date:'d.m.Y h:m' }}
+{{ new.text_post |censor}}
+{% endblock content %}
