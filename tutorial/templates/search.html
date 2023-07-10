@@ -11,16 +11,18 @@ News
 {% block content %}
 <h1>Все новости</h1>
 <h3>Всего статей: {{ news|length }}</h3>
+
+<form method="GET">
+        {{ filter.form }}
+        <input type="submit" value="Найти">
+</form>
 {% if news %}
     <table>
         {% for new in news %}
 
         <tr>
-
             <td>
-                <a href="{% url 'new_detail' new.id %}"><u> Подробно </u></a>
-                <a href="{% url 'new_edit' new.id %}"><u>Редактировать</u></a>
-                <a href="{% url 'new_delete' new.id %}"><u> Удалить </u></a>
+                <h3>{{ new.name_post |censor}}</h3>
             </td>
             <td>
                 <h3>{{ new.time_create |date:'M d Y' }}</h3>
@@ -31,8 +33,6 @@ News
         </tr>
 
         {% endfor %}
-        <a href="{% url 'new_add' %}">Добавить новость</a> <br>
-        <a href="{% url 'new_search' %}">Поиск</a> <br>
     </table>
     {% else %}
         <h2>Новостей нет!</h2>
