@@ -1,4 +1,5 @@
 # from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 from .models import Post, Category, Author, Comment
 from .filters import PostFilter
@@ -36,7 +37,7 @@ class NewsAdd(CreateView):
     form_class = PostForms
 
 
-class NewsEdit(UpdateView):
+class NewsEdit(LoginRequiredMixin, UpdateView):
     template_name = 'edit.html'
     form_class = PostForms
 
@@ -48,4 +49,5 @@ class NewsEdit(UpdateView):
 class NewsDelete(DeleteView):
     template_name = 'delete.html'
     queryset = Post.objects.all()
+    context_object_name ='new'
     success_url = '/News/'
