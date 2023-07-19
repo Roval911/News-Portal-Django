@@ -36,7 +36,7 @@ class LoginView(FormView):
       return super().form_valid(form)
 
 
-class LogoutView(LoginRequiredMixin, TemplateView):
+class LogoutView(TemplateView):
    template_name = 'sign/logout.html'
 
    def get(self, request, *args, **kwargs):

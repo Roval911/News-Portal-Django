@@ -1,5 +1,5 @@
 # from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 from .models import Post, Category, Author, Comment
 from .filters import PostFilter
@@ -32,12 +32,14 @@ class NewsSearch(ListView):
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
-class NewsAdd(CreateView):
+class NewsAdd(CreateView, PermissionRequiredMixin):
+    permission_required = ('news.add_post')
     template_name = 'add.html'
     form_class = PostForms
 
 
-class NewsEdit(LoginRequiredMixin, UpdateView):
+class NewsEdit(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
+    permission_required = ('news.change_post')
     template_name = 'edit.html'
     form_class = PostForms
 
