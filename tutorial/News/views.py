@@ -32,16 +32,18 @@ class NewsSearch(ListView):
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
-class NewsAdd(CreateView, PermissionRequiredMixin):
-    permission_required = ('news.add_post')
+class NewsAdd(PermissionRequiredMixin, CreateView):
+    permission_required = ('News.add_Post')
     template_name = 'add.html'
     form_class = PostForms
+    success_url = '/news/'
 
 
 class NewsEdit(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
-    permission_required = ('news.change_post')
+    permission_required = ('News.change_Post')
     template_name = 'edit.html'
     form_class = PostForms
+    success_url = '/news/{id}'
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
