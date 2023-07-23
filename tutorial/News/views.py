@@ -4,7 +4,11 @@ from django.views.generic import ListView, UpdateView, CreateView, DetailView, D
 from .models import Post, Category, Author, Comment
 from .filters import PostFilter
 from .forms import PostForms
-
+from django.shortcuts import HttpResponseRedirect
+from django.urls import reverse
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.shortcuts import redirect
 
 class PostList(ListView):
     model = Post
@@ -55,3 +59,48 @@ class NewsDelete(DeleteView):
     queryset = Post.objects.all()
     context_object_name ='new'
     success_url = '/News/'
+
+
+
+class CategoryNewsDetail(DetailView):
+    model = Category
+    template_name = 'cat.html'
+    context_object_name = 'cat'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.get(id=self.kwargs['pk'])
+        context['subscribers'] = category.subscribers.all()
+        return context
+
+def subscribe(request, pk):
+    category = Category.objects.get(pk=pk)
+    user = request.user
+    if not category.subscribers.filter(id=user.id).exists():
+        category.subscribers.add(user)
+        email = user.email
+        html = render_to_string(
+            'subscribed.html',
+            {
+                'category': category,
+                'user': user,
+            },
+        )
+        msg = EmailMultiAlternatives(
+            subject=f'Подписка на {category.name_category} на сайте News Paper',
+            body='',
+            from_email='ro-v-al@yandex.ru',
+            to=[email, ],
+        )
+        msg.attach_alternative(html, 'text/html')
+        msg.send()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+def unsubscribe(request, pk):
+    user = request.user
+    c = Category.objects.get(id=pk)
+
+    if c.subscribers.filter(id=user.id).exists():
+        c.subscribers.remove(user)
+    return redirect(request.META.get('HTTP_REFERER'))

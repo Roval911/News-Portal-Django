@@ -23,6 +23,11 @@ News
                 <a href="{% url 'new_delete' new.id %}"><u> Удалить </u></a>
             </td>
             <td>
+                {% for category in new.category.all %}
+                <a href='{% url "cat" category.id %}'>{{category}}</a>
+                {% endfor %}
+            </td>
+            <td>
                 <h3>{{ new.time_create |date:'M d Y' }}</h3>
             </td>
             <td>

@@ -1,0 +1,25 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {{cat.name_category}}
+
+    {% if user not in subscribers %}
+        <form action="{% url 'subscribe' cat.pk %}" method="Post">
+            {% csrf_token %}
+            <input type="submit" value="Подписаться"/>
+        </form>
+    {% else %}
+        <form action="{% url 'unsubscribe' cat.pk %}" method="Post">
+            {% csrf_token %}
+            <input type="submit" value="Отписаться"/>
+        </form>
+    {% endif %}
+</head>
+<body>
+
+</body>
+</html>
+{% endblock content %}
