@@ -93,7 +93,7 @@ def subscribe(request, pk):
             subject=f'Подписка на {category.name_category} на сайте News Paper',
             body='',
             from_email=DEFAULT_FROM_EMAIL,
-            to=['roval911@gmail.com', ],
+            to=email,
         )
         msg.attach_alternative(html, 'text/html')
         msg.send()
