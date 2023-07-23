@@ -163,3 +163,4 @@ EMAIL_PORT = 465 # порт smtp сервера тоже одинаковый
 EMAIL_HOST_USER = 'ro-v-al' # ваше имя пользователя, например если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
 EMAIL_HOST_PASSWORD = 'KoJIoCoK5310'
 EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'ro-v-al@yandex.ru'

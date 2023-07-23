@@ -6,10 +6,13 @@ from .filters import PostFilter
 from .forms import PostForms
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
+from django.conf import settings
 
+
+DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
 class PostList(ListView):
     model = Post
     template_name = 'News.html'
@@ -89,8 +92,8 @@ def subscribe(request, pk):
         msg = EmailMultiAlternatives(
             subject=f'Подписка на {category.name_category} на сайте News Paper',
             body='',
-            from_email='ro-v-al@yandex.ru',
-            to=[email, ],
+            from_email=DEFAULT_FROM_EMAIL,
+            to=['roval911@gmail.com', ],
         )
         msg.attach_alternative(html, 'text/html')
         msg.send()
