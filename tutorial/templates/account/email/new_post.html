@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый пост в категории</title>
+</head>
+<body>
+    <h1>Новый пост в категории, на которую Вы подписаны</h1>
+    <p>В категории "{{ category.name }}" новый пост</p>
+    <a href="http://127.0.0.1:8000{% url 'News:new_detail' post.id %}">
+        <h2>{{ post.title }}</h2>
+    </a>
+    <p>
+        {{ post.preview }}
+    </p>
+</body>
+</html>
