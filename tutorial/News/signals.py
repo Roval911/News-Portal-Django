@@ -5,11 +5,13 @@ from django.conf import settings
 from django.dispatch import receiver
 from .models import PostCategory
 
+
 def get_subscriber(category):
     email = []
     for user in category.subscribers.all():
         email.append(user.email)
     return email
+
 
 @receiver(m2m_changed, sender=PostCategory)
 def notify_subscribers(sender, instance, **kwargs):

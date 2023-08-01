@@ -10,6 +10,7 @@ from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
 from django.conf import settings
+from django.core.cache import cache
 
 
 DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
@@ -26,6 +27,18 @@ class NewsDetail(DetailView):
     model = Post
     template_name = 'New.html'
     context_object_name = 'new'
+
+    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта
+        obj = cache.get(f'new-{self.kwargs["pk"]}',
+                        None)  # кэш очень похож на словарь, и метод get действует также. Он забирает значение по ключу, если его нет, то забирает None.
+
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'new-{self.kwargs["pk"]}', obj)
+
+        return obj
+
 
 
 class NewsSearch(ListView):
