@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.core.cache import cache
 
 
 class Author(models.Model):
@@ -41,6 +42,13 @@ class Post(models.Model):
     name_post = models.CharField(max_length=255, default='заголовок')
     text_post = models.TextField(default='текст статьи')
     reiting = models.IntegerField(default=0)
+
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания переходить на страницу новости
+        return f'/news/{self.id}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'new-{self.pk}')
 
     def like(self):
         self.reiting += 1
